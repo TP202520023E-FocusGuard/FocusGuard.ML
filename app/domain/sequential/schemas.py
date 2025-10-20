@@ -1,7 +1,10 @@
 from pydantic import BaseModel
-from typing import List, Dict, Any, Optional
+from typing import List, Optional, Dict, Any
 from datetime import datetime
 
+# -------------------------
+# Sesión individual de navegación
+# -------------------------
 class NavigationSession(BaseModel):
     dominio: str
     fecha_inicio: datetime
@@ -12,14 +15,21 @@ class NavigationSession(BaseModel):
     es_fin_semana: bool
     patron_uso: str
     contexto_anterior: str
-    fue_bloqueado: bool = False
-    usuario_ignoro_advertencia: bool = False
+    fue_bloqueado: bool
+    usuario_ignoro_advertencia: bool
 
+
+# -------------------------
+# Request principal que enviará el backend
+# -------------------------
 class SequenceRequest(BaseModel):
-    user_id: str
-    navigation_sessions: List[NavigationSession]
-    current_context: str = "trabajando"
+    id_usuario: int
+    historial: List[NavigationSession]
 
+
+# -------------------------
+# Respuesta del modelo ML
+# -------------------------
 class SequencePrediction(BaseModel):
     focus_level: float
     needs_intervention: bool
@@ -28,5 +38,6 @@ class SequencePrediction(BaseModel):
     risk_factors: List[str]
     sequence_stats: Dict[str, Any]
 
-# Mantener los nombres antiguos para compatibilidad
-SequenceData = SequenceRequest  # Alias para compatibilidad
+
+# Alias para compatibilidad (opcional)
+SequenceData = SequenceRequest
